@@ -41,6 +41,18 @@ spring:
             user-name-attribute: email
           github:
             user-name-attribute: login
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;databaseName=JavaTesting;trustServerCertificate=true;
+    username: sa
+    password: lenh0205
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.SQLServerDialect
 
 logging:
   level:
@@ -48,3 +60,5 @@ logging:
     org.springframework.web: INFO
     org.springframework.security: INFO
     org.springframework.security.oauth2: INFO
+
+
