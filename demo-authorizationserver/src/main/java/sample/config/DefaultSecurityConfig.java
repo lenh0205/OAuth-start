@@ -15,6 +15,10 @@
  */
 package sample.config;
 
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import sample.federation.FederatedIdentityAuthenticationSuccessHandler;
 
 import org.springframework.context.annotation.Bean;
@@ -30,6 +34,8 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
+
+import javax.sql.DataSource;
 
 /**
  * @author Joe Grandja
@@ -69,13 +75,12 @@ public class DefaultSecurityConfig {
 
 	// @formatter:off
 	@Bean
-	public UserDetailsService users() {
-		UserDetails user = User.withDefaultPasswordEncoder()
-				.username("user1")
-				.password("password")
-				.roles("USER")
-				.build();
-		return new InMemoryUserDetailsManager(user);
+	public UserDetailsService userDetailsService(DataSource dataSource) {
+		JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);
+
+		userDetailsManager.setUsersByUsernameQuery("SELECT username, password, enabled FROM users WHERE username = ?");
+		userDetailsManager.setAuthoritiesByUsernameQuery("SELECT username, authority FROM authorities WHERE username = ?");
+		return userDetailsManager;
 	}
 	// @formatter:on
 
