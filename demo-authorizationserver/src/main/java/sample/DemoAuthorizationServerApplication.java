@@ -18,7 +18,7 @@ package sample;
 import java.util.Arrays;
 
 import org.thymeleaf.expression.Lists;
-import sample.web.AuthorizationConsentController;
+import sample.web.controllers.AuthorizationConsentController;
 
 import org.springframework.aot.hint.MemberCategory;
 import org.springframework.aot.hint.RuntimeHints;

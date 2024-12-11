@@ -16,6 +16,7 @@
 package sample.config;
 
 import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
@@ -74,6 +75,19 @@ public class DefaultSecurityConfig {
 	}
 
 	// @formatter:off
+	@Bean
+	public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+		return new JdbcTemplate(dataSource);
+	}
+	@Bean
+	public DataSource dataSource() {
+		return DataSourceBuilder.create()
+				.url("jdbc:sqlserver://localhost:1433;databaseName=JavaTesting;trustServerCertificate=true")
+				.username("sa")
+				.password("lenh0205")
+				.driverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver")
+				.build();
+	}
 	@Bean
 	public UserDetailsService userDetailsService(DataSource dataSource) {
 		JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);

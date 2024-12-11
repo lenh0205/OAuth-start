@@ -194,7 +194,7 @@ public class AuthorizationServerConfig {
 				.build();
 
 		// Save registered client's in db as if in-memory
-		JdbcRegisteredClientRepository registeredClientRepository = new JdbcRegisteredClientRepository(jdbcTemplate);
+			JdbcRegisteredClientRepository registeredClientRepository = new JdbcRegisteredClientRepository(jdbcTemplate);
 		registeredClientRepository.save(messagingClient);
 		registeredClientRepository.save(deviceClient);
 		registeredClientRepository.save(tokenExchangeClient);
