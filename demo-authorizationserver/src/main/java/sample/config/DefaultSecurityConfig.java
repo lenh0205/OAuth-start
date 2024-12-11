@@ -74,30 +74,6 @@ public class DefaultSecurityConfig {
 		return new FederatedIdentityAuthenticationSuccessHandler();
 	}
 
-	// @formatter:off
-	@Bean
-	public JdbcTemplate jdbcTemplate(DataSource dataSource) {
-		return new JdbcTemplate(dataSource);
-	}
-	@Bean
-	public DataSource dataSource() {
-		return DataSourceBuilder.create()
-				.url("jdbc:sqlserver://localhost:1433;databaseName=JavaTesting;trustServerCertificate=true")
-				.username("sa")
-				.password("lenh0205")
-				.driverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver")
-				.build();
-	}
-	@Bean
-	public UserDetailsService userDetailsService(DataSource dataSource) {
-		JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);
-
-		userDetailsManager.setUsersByUsernameQuery("SELECT username, password, enabled FROM users WHERE username = ?");
-		userDetailsManager.setAuthoritiesByUsernameQuery("SELECT username, authority FROM authorities WHERE username = ?");
-		return userDetailsManager;
-	}
-	// @formatter:on
-
 	@Bean
 	public SessionRegistry sessionRegistry() {
 		return new SessionRegistryImpl();

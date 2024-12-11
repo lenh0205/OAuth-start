@@ -1,9 +1,6 @@
-package sample.web.entities;
+package sample.config.authorizationserver.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.Instant;
 
@@ -25,13 +22,17 @@ public class Authorization {
 
     @Column(length = 4000)
     private String authorizationCodeValue;
+    @Convert(converter = InstantToTimestampConverter.class)
     private Instant authorizationCodeIssuedAt;
+    @Convert(converter = InstantToTimestampConverter.class)
     private Instant authorizationCodeExpiresAt;
     private String authorizationCodeMetadata;
 
     @Column(length = 4000)
     private String accessTokenValue;
+    @Convert(converter = InstantToTimestampConverter.class)
     private Instant accessTokenIssuedAt;
+    @Convert(converter = InstantToTimestampConverter.class)
     private Instant accessTokenExpiresAt;
     @Column(length = 2000)
     private String accessTokenMetadata;
@@ -41,14 +42,18 @@ public class Authorization {
 
     @Column(length = 4000)
     private String refreshTokenValue;
+    @Convert(converter = InstantToTimestampConverter.class)
     private Instant refreshTokenIssuedAt;
+    @Convert(converter = InstantToTimestampConverter.class)
     private Instant refreshTokenExpiresAt;
     @Column(length = 2000)
     private String refreshTokenMetadata;
 
     @Column(length = 4000)
     private String oidcIdTokenValue;
+    @Convert(converter = InstantToTimestampConverter.class)
     private Instant oidcIdTokenIssuedAt;
+    @Convert(converter = InstantToTimestampConverter.class)
     private Instant oidcIdTokenExpiresAt;
     @Column(length = 2000)
     private String oidcIdTokenMetadata;
@@ -57,14 +62,18 @@ public class Authorization {
 
     @Column(length = 4000)
     private String userCodeValue;
+    @Convert(converter = InstantToTimestampConverter.class)
     private Instant userCodeIssuedAt;
+    @Convert(converter = InstantToTimestampConverter.class)
     private Instant userCodeExpiresAt;
     @Column(length = 2000)
     private String userCodeMetadata;
 
     @Column(length = 4000)
     private String deviceCodeValue;
+    @Convert(converter = InstantToTimestampConverter.class)
     private Instant deviceCodeIssuedAt;
+    @Convert(converter = InstantToTimestampConverter.class)
     private Instant deviceCodeExpiresAt;
     @Column(length = 2000)
     private String deviceCodeMetadata;

@@ -1,4 +1,4 @@
-package sample.web.entities;
+package sample.config.authorizationserver.entities;
 
 import java.io.Serializable;
 import java.util.Objects;

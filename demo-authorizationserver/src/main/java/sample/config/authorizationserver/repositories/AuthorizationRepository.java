@@ -1,4 +1,4 @@
-package sample.web.repositories;
+package sample.config.authorizationserver.repositories;
 
 import java.util.Optional;
 
@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import sample.web.entities.Authorization;
+import sample.config.authorizationserver.entities.Authorization;
 
 @Repository
 public interface AuthorizationRepository extends JpaRepository<Authorization, String> {

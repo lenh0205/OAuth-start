@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package sample.config;
+package sample.config.authorizationserver;
 
 import java.util.UUID;
 
@@ -135,87 +135,87 @@ public class AuthorizationServerConfig {
 	}
 
 	// @formatter:off
-	@Bean
-	public JdbcRegisteredClientRepository registeredClientRepository(JdbcTemplate jdbcTemplate) {
-		RegisteredClient messagingClient = RegisteredClient.withId(UUID.randomUUID().toString())
-				.clientId("messaging-client")
-				.clientSecret("{noop}secret")
-				.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-				.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-				.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-				.authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-				.redirectUri("http://127.0.0.1:8080/login/oauth2/code/messaging-client-oidc")
-				.redirectUri("http://127.0.0.1:8080/authorized")
-				.postLogoutRedirectUri("http://127.0.0.1:8080/logged-out")
-				.scope(OidcScopes.OPENID)
-				.scope(OidcScopes.PROFILE)
-				.scope("message.read")
-				.scope("message.write")
-				.scope("user.read")
-				.clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
-				.build();
-
-		RegisteredClient deviceClient = RegisteredClient.withId(UUID.randomUUID().toString())
-				.clientId("device-messaging-client")
-				.clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
-				.authorizationGrantType(AuthorizationGrantType.DEVICE_CODE)
-				.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-				.scope("message.read")
-				.scope("message.write")
-				.build();
-
-		RegisteredClient tokenExchangeClient = RegisteredClient.withId(UUID.randomUUID().toString())
-				.clientId("token-client")
-				.clientSecret("{noop}token")
-				.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-				.authorizationGrantType(new AuthorizationGrantType("urn:ietf:params:oauth:grant-type:token-exchange"))
-				.scope("message.read")
-				.scope("message.write")
-				.build();
-
-		RegisteredClient mtlsDemoClient = RegisteredClient.withId(UUID.randomUUID().toString())
-				.clientId("mtls-demo-client")
-				.clientAuthenticationMethod(ClientAuthenticationMethod.TLS_CLIENT_AUTH)
-				.clientAuthenticationMethod(ClientAuthenticationMethod.SELF_SIGNED_TLS_CLIENT_AUTH)
-				.authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-				.scope("message.read")
-				.scope("message.write")
-				.clientSettings(
-						ClientSettings.builder()
-								.x509CertificateSubjectDN("CN=demo-client-sample,OU=Spring Samples,O=Spring,C=US")
-								.jwkSetUrl("http://127.0.0.1:8080/jwks")
-								.build()
-				)
-				.tokenSettings(
-						TokenSettings.builder()
-								.x509CertificateBoundAccessTokens(true)
-								.build()
-				)
-				.build();
-
-		// Save registered client's in db as if in-memory
-			JdbcRegisteredClientRepository registeredClientRepository = new JdbcRegisteredClientRepository(jdbcTemplate);
-		registeredClientRepository.save(messagingClient);
-		registeredClientRepository.save(deviceClient);
-		registeredClientRepository.save(tokenExchangeClient);
-		registeredClientRepository.save(mtlsDemoClient);
-
-		return registeredClientRepository;
-	}
+//	@Bean
+//	public JdbcRegisteredClientRepository registeredClientRepository(JdbcTemplate jdbcTemplate) {
+//		RegisteredClient messagingClient = RegisteredClient.withId(UUID.randomUUID().toString())
+//				.clientId("messaging-client")
+//				.clientSecret("{noop}secret")
+//				.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+//				.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+//				.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+//				.authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+//				.redirectUri("http://127.0.0.1:8080/login/oauth2/code/messaging-client-oidc")
+//				.redirectUri("http://127.0.0.1:8080/authorized")
+//				.postLogoutRedirectUri("http://127.0.0.1:8080/logged-out")
+//				.scope(OidcScopes.OPENID)
+//				.scope(OidcScopes.PROFILE)
+//				.scope("message.read")
+//				.scope("message.write")
+//				.scope("user.read")
+//				.clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
+//				.build();
+//
+//		RegisteredClient deviceClient = RegisteredClient.withId(UUID.randomUUID().toString())
+//				.clientId("device-messaging-client")
+//				.clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
+//				.authorizationGrantType(AuthorizationGrantType.DEVICE_CODE)
+//				.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+//				.scope("message.read")
+//				.scope("message.write")
+//				.build();
+//
+//		RegisteredClient tokenExchangeClient = RegisteredClient.withId(UUID.randomUUID().toString())
+//				.clientId("token-client")
+//				.clientSecret("{noop}token")
+//				.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+//				.authorizationGrantType(new AuthorizationGrantType("urn:ietf:params:oauth:grant-type:token-exchange"))
+//				.scope("message.read")
+//				.scope("message.write")
+//				.build();
+//
+//		RegisteredClient mtlsDemoClient = RegisteredClient.withId(UUID.randomUUID().toString())
+//				.clientId("mtls-demo-client")
+//				.clientAuthenticationMethod(ClientAuthenticationMethod.TLS_CLIENT_AUTH)
+//				.clientAuthenticationMethod(ClientAuthenticationMethod.SELF_SIGNED_TLS_CLIENT_AUTH)
+//				.authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+//				.scope("message.read")
+//				.scope("message.write")
+//				.clientSettings(
+//						ClientSettings.builder()
+//								.x509CertificateSubjectDN("CN=demo-client-sample,OU=Spring Samples,O=Spring,C=US")
+//								.jwkSetUrl("http://127.0.0.1:8080/jwks")
+//								.build()
+//				)
+//				.tokenSettings(
+//						TokenSettings.builder()
+//								.x509CertificateBoundAccessTokens(true)
+//								.build()
+//				)
+//				.build();
+//
+//		// Save registered client's in db as if in-memory
+//			JdbcRegisteredClientRepository registeredClientRepository = new JdbcRegisteredClientRepository(jdbcTemplate);
+//		registeredClientRepository.save(messagingClient);
+//		registeredClientRepository.save(deviceClient);
+//		registeredClientRepository.save(tokenExchangeClient);
+//		registeredClientRepository.save(mtlsDemoClient);
+//
+//		return registeredClientRepository;
+//	}
 	// @formatter:on
 
-	@Bean
-	public JdbcOAuth2AuthorizationService authorizationService(JdbcTemplate jdbcTemplate,
-			RegisteredClientRepository registeredClientRepository) {
-		return new JdbcOAuth2AuthorizationService(jdbcTemplate, registeredClientRepository);
-	}
+//	@Bean
+//	public JdbcOAuth2AuthorizationService authorizationService(JdbcTemplate jdbcTemplate,
+//			RegisteredClientRepository registeredClientRepository) {
+//		return new JdbcOAuth2AuthorizationService(jdbcTemplate, registeredClientRepository);
+//	}
 
-	@Bean
-	public JdbcOAuth2AuthorizationConsentService authorizationConsentService(JdbcTemplate jdbcTemplate,
-			RegisteredClientRepository registeredClientRepository) {
-		// Will be used by the ConsentController
-		return new JdbcOAuth2AuthorizationConsentService(jdbcTemplate, registeredClientRepository);
-	}
+//	@Bean
+//	public JdbcOAuth2AuthorizationConsentService authorizationConsentService(JdbcTemplate jdbcTemplate,
+//			RegisteredClientRepository registeredClientRepository) {
+//		// Will be used by the ConsentController
+//		return new JdbcOAuth2AuthorizationConsentService(jdbcTemplate, registeredClientRepository);
+//	}
 
 	@Bean
 	public OAuth2TokenCustomizer<JwtEncodingContext> idTokenCustomizer() {

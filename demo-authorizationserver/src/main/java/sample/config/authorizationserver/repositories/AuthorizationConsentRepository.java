@@ -1,10 +1,10 @@
-package sample.web.repositories;
+package sample.config.authorizationserver.repositories;
 
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import sample.web.entities.AuthorizationConsent;
+import sample.config.authorizationserver.entities.AuthorizationConsent;
 
 @Repository
 public interface AuthorizationConsentRepository extends JpaRepository<AuthorizationConsent, AuthorizationConsent.AuthorizationConsentId> {

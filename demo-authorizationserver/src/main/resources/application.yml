@@ -45,6 +45,7 @@ spring:
     url: jdbc:sqlserver://localhost:1433;databaseName=JavaTesting;trustServerCertificate=true;
     username: sa
     password: lenh0205
+     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
   jpa:
     show-sql: true
     hibernate:
@@ -52,7 +53,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.SQLServerDialect
 
 logging:
   level:
@@ -60,5 +60,11 @@ logging:
     org.springframework.web: INFO
     org.springframework.security: INFO
     org.springframework.security.oauth2: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql: TRACE
+    org.springframework.jdbc.core: DEBUG
+    org.springframework.jdbc.core.JdbcTemplate: DEBUG
+    org.springframework.jdbc.datasource.DataSourceTransactionManager: DEBUG
+    com.zaxxer.hikari: DEBUG
 
 
