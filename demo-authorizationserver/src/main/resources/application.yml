@@ -45,7 +45,7 @@ spring:
     url: jdbc:sqlserver://localhost:1433;databaseName=JavaTesting;trustServerCertificate=true;
     username: sa
     password: lenh0205
-     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
   jpa:
     show-sql: true
     hibernate:
