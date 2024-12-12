@@ -84,4 +84,18 @@ public class DefaultSecurityConfig {
 		return new HttpSessionEventPublisher();
 	}
 
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+//	@Bean
+//	public UserDetailsService users() {
+//		UserDetails user = User.withDefaultPasswordEncoder()
+//				.username("user1")
+//				.password("password")
+//				.roles("USER")
+//				.build();
+//		return new InMemoryUserDetailsManager(user);
+//	}
 }

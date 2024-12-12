@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import sample.config.authorizationserver.entities.User;
@@ -22,49 +23,25 @@ import java.sql.SQLException;
 public class JpaUserDetailsService implements UserDetailsService {
     private static final Logger logger = LoggerFactory.getLogger(JpaUserDetailsService.class);
     private final UserRepository userRepository;
-    DataSource dataSource;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public JpaUserDetailsService(UserRepository userRepository, DataSource dataSource) {
+    public JpaUserDetailsService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.dataSource = dataSource;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        logger.info("----------> UserName {}", username);
-
-        try (Connection connection = dataSource.getConnection()) {
-            // Log connection details
-            DatabaseMetaData metaData = connection.getMetaData();
-            logger.info("----------> Database Product Name: {}", metaData.getDatabaseProductName());
-            logger.info("----------> Database Product Version: {}", metaData.getDatabaseProductVersion());
-            logger.info("----------> Driver Name: {}", metaData.getDriverName());
-            logger.info("----------> Driver Version: {}", metaData.getDriverVersion());
-            logger.info("----------> URL: {}", metaData.getURL());
-            logger.info("----------> User: {}", metaData.getUserName());
-
-            if (connection.isClosed()) {
-                logger.error("----------> Connection is closed");
-            } else {
-                logger.info("----------> Connection is open");
-            }
-        } catch (SQLException e) {
-            logger.error("----------> Error while checking database connection", e);
-            throw new RuntimeException("Database connection error", e);
-        }
-
-        ObjectMapper objectMapper = new ObjectMapper();
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> {
-                    logger.info("----------> User not found: {}", username);
-                    return new UsernameNotFoundException("User not found: " + username);
-                });
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+
+        logger.info("----------> password: {}", user.getPassword());
 
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
-//                .roles(user.getRoles().toArray(new String[0]))
+                
                 .build();
     }
 }
