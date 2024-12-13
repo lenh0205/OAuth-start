@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.jackson2.SecurityJackson2Modules;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
@@ -26,11 +27,13 @@ import sample.config.authorizationserver.repositories.ClientRepository;
 public class JpaRegisteredClientRepository implements RegisteredClientRepository {
     private final ClientRepository clientRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public JpaRegisteredClientRepository(ClientRepository clientRepository) {
+    public JpaRegisteredClientRepository(ClientRepository clientRepository, PasswordEncoder passwordEncoder) {
         Assert.notNull(clientRepository, "clientRepository cannot be null");
         this.clientRepository = clientRepository;
+        this.passwordEncoder = passwordEncoder;
 
         ClassLoader classLoader = JpaRegisteredClientRepository.class.getClassLoader();
         List<Module> securityModules = SecurityJackson2Modules.getModules(classLoader);
@@ -165,7 +168,7 @@ public class JpaRegisteredClientRepository implements RegisteredClientRepository
         List<RegisteredClient> defaultClients = List.of(
                 RegisteredClient.withId(UUID.randomUUID().toString())
                         .clientId("messaging-client")
-                        .clientSecret("{noop}secret")
+                        .clientSecret(passwordEncoder.encode("secret"))
                         .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                         .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                         .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
@@ -190,7 +193,7 @@ public class JpaRegisteredClientRepository implements RegisteredClientRepository
                         .build(),
                 RegisteredClient.withId(UUID.randomUUID().toString())
                         .clientId("token-client")
-                        .clientSecret("{noop}token")
+                        .clientSecret(passwordEncoder.encode("token"))
                         .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                         .authorizationGrantType(new AuthorizationGrantType("urn:ietf:params:oauth:grant-type:token-exchange"))
                         .scope("message.read")

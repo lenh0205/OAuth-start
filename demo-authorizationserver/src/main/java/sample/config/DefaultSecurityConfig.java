@@ -90,10 +90,10 @@ public class DefaultSecurityConfig {
 	}
 
 //	@Bean
-//	public UserDetailsService users() {
-//		UserDetails user = User.withDefaultPasswordEncoder()
+//	public UserDetailsService users(PasswordEncoder passwordEncoder) {
+//		UserDetails user = User.builder()
 //				.username("user1")
-//				.password("password")
+//				.password(passwordEncoder.encode("password"))
 //				.roles("USER")
 //				.build();
 //		return new InMemoryUserDetailsManager(user);
