@@ -32,6 +32,7 @@ public class JpaOAuth2AuthorizationConsentService implements OAuth2Authorization
 
     @Override
     public void save(OAuth2AuthorizationConsent authorizationConsent) {
+        System.out.println("----------> save JpaOAuth2AuthorizationConsentService");
         Assert.notNull(authorizationConsent, "authorizationConsent cannot be null");
         this.authorizationConsentRepository.save(toEntity(authorizationConsent));
     }
@@ -45,10 +46,16 @@ public class JpaOAuth2AuthorizationConsentService implements OAuth2Authorization
 
     @Override
     public OAuth2AuthorizationConsent findById(String registeredClientId, String principalName) {
+        System.out.println("----------> findById JpaOAuth2AuthorizationConsentService");
         Assert.hasText(registeredClientId, "registeredClientId cannot be empty");
         Assert.hasText(principalName, "principalName cannot be empty");
-        return this.authorizationConsentRepository.findByRegisteredClientIdAndPrincipalName(
-                registeredClientId, principalName).map(this::toObject).orElse(null);
+
+        OAuth2AuthorizationConsent test = this.authorizationConsentRepository
+                .findByRegisteredClientIdAndPrincipalName(registeredClientId, principalName)
+                .map(this::toObject)
+                .orElse(null);
+        System.out.println(test);
+        return test;
     }
 
     private OAuth2AuthorizationConsent toObject(AuthorizationConsent authorizationConsent) {

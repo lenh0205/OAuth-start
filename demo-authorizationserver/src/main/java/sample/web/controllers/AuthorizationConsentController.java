@@ -21,7 +21,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsent;
@@ -54,21 +58,36 @@ public class AuthorizationConsentController {
 			@RequestParam(OAuth2ParameterNames.SCOPE) String scope,
 			@RequestParam(OAuth2ParameterNames.STATE) String state,
 			@RequestParam(name = OAuth2ParameterNames.USER_CODE, required = false) String userCode) {
-
-		// Remove scopes that were already approved
-		Set<String> scopesToApprove = new HashSet<>();
-		Set<String> previouslyApprovedScopes = new HashSet<>();
+		System.out.println("----------> consent endpoint");
 		RegisteredClient registeredClient = this.registeredClientRepository.findByClientId(clientId);
+		if (registeredClient == null) throw new IllegalArgumentException("Invalid client ID: " + clientId);
+
 		OAuth2AuthorizationConsent currentAuthorizationConsent =
 				this.authorizationConsentService.findById(registeredClient.getId(), principal.getName());
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication == null) throw new IllegalStateException("Authentication is required to access the consent page.");
+		Set<String> userScopeAuthorities = authentication.getAuthorities().stream()
+				.map(GrantedAuthority::getAuthority)
+				.filter(authority -> authority.startsWith("SCOPE_"))
+				.map(authority -> authority.substring("SCOPE_".length()))
+				.collect(Collectors.toSet());
+
 		Set<String> authorizedScopes;
 		if (currentAuthorizationConsent != null) {
 			authorizedScopes = currentAuthorizationConsent.getScopes();
 		} else {
 			authorizedScopes = Collections.emptySet();
 		}
+
+		Set<String> scopesToApprove = new HashSet<>();
+		Set<String> previouslyApprovedScopes = new HashSet<>();
 		for (String requestedScope : StringUtils.delimitedListToStringArray(scope, " ")) {
 			if (OidcScopes.OPENID.equals(requestedScope)) {
+				continue;
+			}
+			if (!userScopeAuthorities.contains(requestedScope) && !OidcScopes.PROFILE.equals(requestedScope)) {
+				System.out.println("-----------> userScopeAuthorities" + userScopeAuthorities.toString());
 				continue;
 			}
 			if (authorizedScopes.contains(requestedScope)) {
